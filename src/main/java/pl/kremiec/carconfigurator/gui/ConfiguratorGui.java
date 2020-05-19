@@ -1,18 +1,26 @@
 package pl.kremiec.carconfigurator.gui;
 
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.tabs.Tab;
+import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.component.textfield.TextArea;
+import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Route;
 import org.springframework.beans.factory.annotation.Autowired;
 import pl.kremiec.carconfigurator.objects.CarModels;
+import pl.kremiec.carconfigurator.objects.Colors;
 import pl.kremiec.carconfigurator.objects.Engines;
 import pl.kremiec.carconfigurator.repo.CarModelsRepo;
+import pl.kremiec.carconfigurator.repo.ColorsRepo;
 import pl.kremiec.carconfigurator.repo.EnginesRepo;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 
 @Route("gui")
@@ -20,24 +28,32 @@ public class ConfiguratorGui extends VerticalLayout {
 
     CarModelsRepo carModelsRepo; //repository of car
     EnginesRepo enginesRepo; //repository of engines
+    ColorsRepo colorsRepo; //repository of colors
+
     ArrayList<CarModels> modelsArrayList; //arraylist of models
     ArrayList<Engines> enginesArrayList; //arraylist of engines
+    ArrayList<Colors> colorsArrayList; //arraylist of colors
+
     HorizontalLayout horizontalLayoutForEngine; //horizontal layout for engine choosement
     HorizontalLayout horizontalLayoutForCarChoose; //horizontal layout for car choosement
+    VerticalLayout verticalLayoutForColor; //vertical layout for color choosment
 
-    CarModels choosedModel = new CarModels();
-    String choosedEngine;
+    CarModels choosedModel = new CarModels(); //choosed model
+    String choosedEngine;                   //choosed engine
+    Colors choosedColor = new Colors();     //choosed color
     
     @Autowired
-    ConfiguratorGui(CarModelsRepo carModelsRepo, EnginesRepo enginesRepo){
+    ConfiguratorGui(CarModelsRepo carModelsRepo, EnginesRepo enginesRepo, ColorsRepo colorsRepo){
         this.carModelsRepo = carModelsRepo;
         this.enginesRepo = enginesRepo;
+        this.colorsRepo = colorsRepo;
 
         horizontalLayoutForCarChoose = new HorizontalLayout();
         horizontalLayoutForEngine = new HorizontalLayout();
+        verticalLayoutForColor = new VerticalLayout();
 
 
-        modelChoose();
+        modelChoose(); //here first method starts
 
     }
 
@@ -50,15 +66,29 @@ public class ConfiguratorGui extends VerticalLayout {
         methodAddHorizontalLayoutCarChoose(carImage);
     }
 
-    public void engineChoose(String modelName){
+    public void colorChoose(){
+
+        colorsArrayList = new ArrayList<>();
+        colorsRepo.findAll().forEach(s->colorsArrayList.add(s)); //adding all colors to repo
+
+        Set<String> categoriesSet = new HashSet<>();
+        colorsArrayList.stream().filter(s->s.getDecicatedToCar().equals(choosedModel.getModelName())) //adding color categories to set
+                .forEach(x->categoriesSet.add(x.getCategory()));
+
+        methodAddVerticalLayoutColorChoose(categoriesSet);
+
+    }
+
+    public void engineChoose(){
 
         Image engineImage = new Image();
         TextArea engineTextArea = new TextArea();
         enginesArrayList = new ArrayList<>();
         enginesRepo.findAll().forEach(s->enginesArrayList.add(s)); //adding engines to arraylist
 
-        methodAddHorizontalLayoutEngineChoose(modelName,engineImage,engineTextArea);
+        methodAddHorizontalLayoutEngineChoose(engineImage,engineTextArea);
     }
+
 
     public void methodAddHorizontalLayoutCarChoose(Image carImage){ //method which adds horizontal layout of car choosment to main vertical layout
 
@@ -76,22 +106,100 @@ public class ConfiguratorGui extends VerticalLayout {
                 choosedModel=click.getValue(); //saving choosed car to variable
                 horizontalLayoutForCarChoose.add(carImage); //adding car image to car horizontal layout
                 horizontalLayoutForEngine.removeAll(); //removing everything from engine layout because when you changed your car selection, it need to reload new photo
-                engineChoose(click.getValue().getModelName()); //if user choose model name, then show engines
+                verticalLayoutForColor.removeAll(); //removing everything from engine layout because when you changed your car selection, it need to reload new photo
+                colorChoose();
             }
         });
         horizontalLayoutForCarChoose.add(comboBoxCar); //adding combobox to horizontal car layout
         add(horizontalLayoutForCarChoose); //adding horizontal car layout to main vertical layout
     }
 
+    public void methodAddVerticalLayoutColorChoose(Set<String> categoriesSet){
 
-    public void methodAddHorizontalLayoutEngineChoose(String modelName, Image engineImage, TextArea engineTextArea) {
+        Tabs tabs = new Tabs();
+            Tab tabNormal = new Tab("Normal");
+            Tab tabMetallic = new Tab("Metalic");       //tabs of cathegories
+            Tab tabDesigno = new Tab("Designo");
+        tabs.add(tabNormal,tabMetallic,tabDesigno);
+
+        verticalLayoutForColor.add(tabs);   //adding tabs to main layout
+
+        VerticalLayout verticalLayoutForNormal = new VerticalLayout();
+        VerticalLayout verticalLayoutForMetallic = new VerticalLayout();  //vertical layouts for every category
+        VerticalLayout verticalLayoutForDesigno = new VerticalLayout();
+
+        for (Colors colorsCounter : colorsArrayList) {      //loop through every color
+            for (String categoryCounter : categoriesSet) {      //loop through every category
+                Image colorImage = new Image();                                     //
+                colorImage.setSrc(colorsCounter.getLink());                         //  creating objects for every color
+                Button colorButton = new Button(colorsCounter.getColor());
+                TextField colorPriceTextField = new TextField();
+                colorPriceTextField.setValue("Price: " + colorsCounter.getPrice());
+                colorButton.addClickListener(click->{                               //
+                    colorButton.setText(colorButton.getText() + " choosed -->");
+                    choosedColor=colorsCounter;
+                    horizontalLayoutForEngine.removeAll();
+                    engineChoose();
+                });
+
+                if (colorsCounter.getCategory().equals(categoryCounter)) {
+                    HorizontalLayout horizontalLayoutForActualColor = new HorizontalLayout();
+
+                    if(categoryCounter.equals("normal") && colorsCounter.getDecicatedToCar().equals(choosedModel.getModelName())){ //adding every color to its category
+                        horizontalLayoutForActualColor.add(colorButton);
+                        horizontalLayoutForActualColor.add(colorImage);
+                        horizontalLayoutForActualColor.add(colorPriceTextField);
+                        verticalLayoutForNormal.add(horizontalLayoutForActualColor);
+                    } else if(categoryCounter.equals("metallic") && colorsCounter.getDecicatedToCar().equals(choosedModel.getModelName())){ //adding every color to its category
+                        horizontalLayoutForActualColor.add(colorButton);
+                        horizontalLayoutForActualColor.add(colorImage);
+                        horizontalLayoutForActualColor.add(colorPriceTextField);
+                        verticalLayoutForMetallic.add(horizontalLayoutForActualColor);
+                    }else if(categoryCounter.equals("designo") && colorsCounter.getDecicatedToCar().equals(choosedModel.getModelName())){ //adding every color to its category
+                        horizontalLayoutForActualColor.add(colorButton);
+                        horizontalLayoutForActualColor.add(colorImage);
+                        horizontalLayoutForActualColor.add(colorPriceTextField);
+                        verticalLayoutForDesigno.add(horizontalLayoutForActualColor);
+                    }
+                }
+            }
+        }
+
+        tabs.addSelectedChangeListener(event -> {
+
+            if (event.getSelectedTab().equals(tabNormal)) {         //if user clicks normal it shows every color of this cathegory
+                remove(horizontalLayoutForEngine);
+                verticalLayoutForColor.removeAll();
+                verticalLayoutForColor.add(tabs);
+                verticalLayoutForColor.add(verticalLayoutForNormal);
+                add(verticalLayoutForColor);
+            }
+            if (event.getSelectedTab().equals(tabMetallic)) {       //if user clicks metallic it shows every color of this cathegory
+                remove(horizontalLayoutForEngine);
+                verticalLayoutForColor.removeAll();
+                verticalLayoutForColor.add(tabs);
+                verticalLayoutForColor.add(verticalLayoutForMetallic);
+                add(verticalLayoutForColor);
+            }
+            if (event.getSelectedTab().equals(tabDesigno)) {        //if user clicks designo it shows every color of this cathegory
+                remove(horizontalLayoutForEngine);
+                verticalLayoutForColor.removeAll();
+                verticalLayoutForColor.add(tabs);
+                verticalLayoutForColor.add(verticalLayoutForDesigno);
+                add(verticalLayoutForColor);
+            }
+        });
+        add(verticalLayoutForColor);
+    }
+
+    public void methodAddHorizontalLayoutEngineChoose(Image engineImage, TextArea engineTextArea) {
 
         ComboBox<String> engineComboBox = new ComboBox<>(); //combobox of engine choosment
         engineComboBox.setLabel("Choose your engine");
         engineComboBox.setWidth("260px");
         ArrayList<String> engineArrayList = new ArrayList<>(); //auxiliary arraylist for custom combobox options
         for (Engines enginesCounter : enginesArrayList) {
-            if (enginesCounter.getDecicatedToModel().equals(modelName)) {
+            if (enginesCounter.getDecicatedToModel().equals(choosedModel.getModelName())) {
                 String str; //custom string
                 if (enginesCounter.getTypeOfFuel().equals("diesel")) {
                     str = enginesCounter.getEngineSize() + "d"; //if engine.equals("diesel") it add ,,d" at end of engine size
@@ -110,11 +218,11 @@ public class ConfiguratorGui extends VerticalLayout {
 
                 enginesArrayList.forEach(s -> {
                     String str = click.getValue().substring(0, 3);
-                    if (s.getEngineSize() == Double.parseDouble(str) && s.getDecicatedToModel().equals(modelName)) {
+                    if (s.getEngineSize() == Double.parseDouble(str) && s.getDecicatedToModel().equals(choosedModel.getModelName())) {
                         engineImage.setSrc(s.getLink()); //get src of engine
                         engineImage.setWidth("280px");
                         choosedEngine=click.getValue(); //save choosed engine to variable
-                        engineTextArea.setValue(showEngineInfo(s,choosedModel)); //setting custom string to textarea
+                        engineTextArea.setValue(InfoNextToEngine(s)); //setting custom string to textarea
                         engineTextArea.setWidth("350px");
                         horizontalLayoutForEngine.add(engineImage,engineTextArea); //adding image and textarea every time when user changes engine
                     }
@@ -126,9 +234,9 @@ public class ConfiguratorGui extends VerticalLayout {
     }
 
 
-    public String showEngineInfo(Engines engine, CarModels model){
-        return String.format("Choosed Mercedes-Benz %s class in basic costs %.2fpln.\nEngine you choosed is %.1f %s engine with %dhp and addicitonal price %dpln.\nPrice for car is now %.2fpln.",
-                model.getModelName(), model.getBasicPrice(), engine.getEngineSize(), engine.getTypeOfFuel(), engine.getHpAmount(), engine.getPrice(), model.getBasicPrice()+(double)engine.getPrice());
+    public String InfoNextToEngine(Engines engine){
+        return String.format("Choosed Mercedes-Benz %s class in basic costs %.2fpln.\nYou choosed color %s %s, addictional price for this color is %dpln\nEngine you choosed is %.1f %s engine with %dhp and addicitonal price %dpln.\nPrice for car is now %.2fpln.",
+                choosedModel.getModelName(), choosedModel.getBasicPrice(),choosedColor.getCategory(), choosedColor.getColor(), choosedColor.getPrice(), engine.getEngineSize(), engine.getTypeOfFuel(), engine.getHpAmount(), engine.getPrice(), choosedModel.getBasicPrice()+(double)engine.getPrice()+choosedColor.getPrice());
     }
 
 

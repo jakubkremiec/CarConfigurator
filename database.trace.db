@@ -18,3 +18,7 @@ INSERT INTO "PUBLIC"."CAR_MODELS"("ID","AMOUNT_OF_DOORS","BASIC_PRICE","MODEL_NA
 org.h2.jdbc.JdbcSQLDataException: Błąd konwersji danych "'a' (CAR_MODELS: ""AMOUNT_OF_DOORS"" INTEGER NOT NULL)"
 Data conversion error converting "'a' (CAR_MODELS: ""AMOUNT_OF_DOORS"" INTEGER NOT NULL)"; SQL statement:
 INSERT INTO "PUBLIC"."CAR_MODELS"("ID","AMOUNT_OF_DOORS","BASIC_PRICE","MODEL_NAME")VALUES(?,?,?,?) [22018-200]
+2020-05-18 21:50:10 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabela "COLORS_MODELS" nie istnieje
+Table "COLORS_MODELS" not found; SQL statement:
+SELECT * FROM COLORS_MODELS [42102-200]
