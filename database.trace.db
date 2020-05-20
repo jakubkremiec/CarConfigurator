@@ -22,3 +22,31 @@ INSERT INTO "PUBLIC"."CAR_MODELS"("ID","AMOUNT_OF_DOORS","BASIC_PRICE","MODEL_NA
 org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabela "COLORS_MODELS" nie istnieje
 Table "COLORS_MODELS" not found; SQL statement:
 SELECT * FROM COLORS_MODELS [42102-200]
+2020-05-20 15:17:46 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabela "CAR_MODELSMODELS" nie istnieje
+Table "CAR_MODELSMODELS" not found; SQL statement:
+drop table car_modelsMODELS [42102-200]
+2020-05-20 15:19:53 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLDataException: Wartość za długa dla kolumny "LINK VARCHAR(255)": "'https://europe.starconnect-ce.i.daimler.com/iris/iris.jpg?COSY-EU-100-1713d0VXq5SFqtyO35PobzIExXrItvsTQKkojUfGoo7GE11KFm9whk9Q6... (652)"
+Value too long for column "LINK VARCHAR(255)": "'https://europe.starconnect-ce.i.daimler.com/iris/iris.jpg?COSY-EU-100-1713d0VXq5SFqtyO35PobzIExXrItvsTQKkojUfGoo7GE11KFm9whk9Q6... (652)"; SQL statement:
+INSERT INTO "PUBLIC"."MODELS"("ID","AMOUNT_OF_DOORS","BASIC_PRICE","LINK","MODEL_NAME")VALUES(?,?,?,?,?) [22001-200]
+2020-05-20 15:19:53 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLDataException: Wartość za długa dla kolumny "LINK VARCHAR(255)": "'https://europe.starconnect-ce.i.daimler.com/iris/iris.jpg?COSY-EU-100-1713d0VXq5SFqtyO35PobzIExXrItvsTQKkojUfGoo7GE11KFm9whk9Q6... (652)"
+Value too long for column "LINK VARCHAR(255)": "'https://europe.starconnect-ce.i.daimler.com/iris/iris.jpg?COSY-EU-100-1713d0VXq5SFqtyO35PobzIExXrItvsTQKkojUfGoo7GE11KFm9whk9Q6... (652)"; SQL statement:
+INSERT INTO "PUBLIC"."MODELS"("ID","AMOUNT_OF_DOORS","BASIC_PRICE","LINK","MODEL_NAME")VALUES(?,?,?,?,?) [22001-200]
+2020-05-20 15:20:22 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLDataException: Wartość za długa dla kolumny "LINK VARCHAR(255)": "'https://europe.starconnect-ce.i.daimler.com/iris/iris.jpg?COSY-EU-100-1713d0VXq5SFqtyO35PobzIExXrItvsTQKkojUfGoo7GE11KFm9whk9Q6... (652)"
+Value too long for column "LINK VARCHAR(255)": "'https://europe.starconnect-ce.i.daimler.com/iris/iris.jpg?COSY-EU-100-1713d0VXq5SFqtyO35PobzIExXrItvsTQKkojUfGoo7GE11KFm9whk9Q6... (652)"; SQL statement:
+INSERT INTO "PUBLIC"."MODELS"("ID","AMOUNT_OF_DOORS","BASIC_PRICE","LINK","MODEL_NAME")VALUES(?,?,?,?,?) [22001-200]
+2020-05-20 15:20:22 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLDataException: Wartość za długa dla kolumny "LINK VARCHAR(255)": "'https://europe.starconnect-ce.i.daimler.com/iris/iris.jpg?COSY-EU-100-1713d0VXq5SFqtyO35PobzIExXrItvsTQKkojUfGoo7GE11KFm9whk9Q6... (652)"
+Value too long for column "LINK VARCHAR(255)": "'https://europe.starconnect-ce.i.daimler.com/iris/iris.jpg?COSY-EU-100-1713d0VXq5SFqtyO35PobzIExXrItvsTQKkojUfGoo7GE11KFm9whk9Q6... (652)"; SQL statement:
+INSERT INTO "PUBLIC"."MODELS"("ID","AMOUNT_OF_DOORS","BASIC_PRICE","LINK","MODEL_NAME")VALUES(?,?,?,?,?) [22001-200]
+2020-05-20 18:29:31 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLDataException: Błąd konwersji danych "'78.800' (ENGINES: ""PRICE"" INTEGER NOT NULL)"
+Data conversion error converting "'78.800' (ENGINES: ""PRICE"" INTEGER NOT NULL)"; SQL statement:
+INSERT INTO "PUBLIC"."ENGINES"("ID","DECICATED_TO_MODEL","ENGINE_SIZE","HP_AMOUNT","LINK","PRICE","TYPE_OF_FUEL")VALUES(?,?,?,?,?,?,?) [22018-200]
+2020-05-20 18:29:31 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLDataException: Błąd konwersji danych "'78.800' (ENGINES: ""PRICE"" INTEGER NOT NULL)"
+Data conversion error converting "'78.800' (ENGINES: ""PRICE"" INTEGER NOT NULL)"; SQL statement:
+INSERT INTO "PUBLIC"."ENGINES"("ID","DECICATED_TO_MODEL","ENGINE_SIZE","HP_AMOUNT","LINK","PRICE","TYPE_OF_FUEL")VALUES(?,?,?,?,?,?,?) [22018-200]
