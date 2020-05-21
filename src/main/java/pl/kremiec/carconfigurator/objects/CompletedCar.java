@@ -189,4 +189,8 @@ private String colorSrc;
     public String getColorSrc() {
         return colorSrc;
     }
+
+    public LocalDateTime getLocalDateTime() {
+        return localDateTime;
+    }
 }

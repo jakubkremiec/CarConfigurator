@@ -12,7 +12,7 @@ public class Models {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    private String modelName; //first choice on web page
+    private String modelName;
     private int amountOfDoors;
     private double basicPrice;
     private String link;

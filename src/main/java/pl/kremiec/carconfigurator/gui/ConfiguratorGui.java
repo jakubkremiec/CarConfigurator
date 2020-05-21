@@ -25,7 +25,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 
-@Route("gui")
+@Route("")
 public class ConfiguratorGui extends VerticalLayout {
 
     CarModelsRepo carModelsRepo; //repository of car

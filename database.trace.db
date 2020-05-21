@@ -50,3 +50,7 @@ INSERT INTO "PUBLIC"."ENGINES"("ID","DECICATED_TO_MODEL","ENGINE_SIZE","HP_AMOUN
 org.h2.jdbc.JdbcSQLDataException: Błąd konwersji danych "'78.800' (ENGINES: ""PRICE"" INTEGER NOT NULL)"
 Data conversion error converting "'78.800' (ENGINES: ""PRICE"" INTEGER NOT NULL)"; SQL statement:
 INSERT INTO "PUBLIC"."ENGINES"("ID","DECICATED_TO_MODEL","ENGINE_SIZE","HP_AMOUNT","LINK","PRICE","TYPE_OF_FUEL")VALUES(?,?,?,?,?,?,?) [22018-200]
+2020-05-21 17:24:56 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Błąd składniowy w wyrażeniu SQL "SELECT * FROM COLORS ENGINES MODELS[*]"
+Syntax error in SQL statement "SELECT * FROM COLORS ENGINES MODELS[*]"; SQL statement:
+SELECT * FROM COLORS ENGINES MODELS [42000-200]
