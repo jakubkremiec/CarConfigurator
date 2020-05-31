@@ -7,7 +7,7 @@
 * Choose engine
 * Complete your order
 
-## Every option (car, color, engine) has a photo, you can see how it looks like
+## Every option (car, color, engine) has a photo, you can see how it looks like.
 
 ## App shows, and calcualtes choosed configuration in real time.
 
