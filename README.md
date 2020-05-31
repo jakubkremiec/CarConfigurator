@@ -11,4 +11,4 @@
 
 ## App shows, and calcualtes choosed configuration in real time.
 
-# Made using: Java, Spring, Vaadin, H2 database.
+### Made using: Java, Spring, Vaadin, H2 database.
